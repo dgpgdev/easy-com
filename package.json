@@ -9,6 +9,10 @@
     "build": "babel src --out-dir lib"
   },
   "author": "Gauthier de Girodon Pralong",
+  "repository" :
+  { "type" : "git",
+    "url" : "https://github.com/dgpgdev/easy-com.git"
+  },
   "license": "MIT",
   "dependencies": {
     "node": "0.0.0",
