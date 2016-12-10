@@ -8,9 +8,11 @@ class Room {
     /**
      * Constructor
      * @param {string} id - The id value
+     * @param {boolean} keepAlive - flag to keep alive room when no user inside
      */
-    constructor(id = '') {
+    constructor(id = '', keepAlive = false) {
         this.id = id;
+        this.keepAlive = keepAlive;
         this._clientList = [];
     }
 

@@ -30,23 +30,31 @@ class RoomManager {
         return this.roomList.filter((room) => room.id === roomID)[0];
     }
 
+    create(roomID, keepAlive){
+      let r = this.getRoom(roomID)
+      if (r === undefined) {
+          r = new Room(roomID, keepAlive)
+          this.roomList.push(r);
+      }
+
+      return r;
+
+    }
     /**
      * Add socket to room
      * @param {string} roomdID - the room id
      * @param {Websocket} socket - the websocket object
      */
     join(roomID, socket) {
-        let r = this.getRoom(roomID)
-        if (r === undefined) {
-            r = new Room(roomID)
-            this.roomList.push(r);
-        }
+        let r = this.create(roomID);
+
         if (socket.rooms === undefined) {
             socket.rooms = [];
         }
         socket.rooms.push(roomID);
         r.join(socket);
     }
+
 
     /**
      * Remove socket from room
@@ -56,6 +64,9 @@ class RoomManager {
     leave(roomID, socket) {
         let r = this.getRoom(roomID);
         r.leave(socket);
+        if(r.clients.length === 0 && !r.keepAlive){
+          this.roomList = this.roomList.filter((room) => room.id != roomID);
+        };
     }
 
 }
