@@ -1,36 +1,6 @@
-## What is Easy-Com ?
-Easy-Com is a decorator of powerfull ws package ([ws github][983cff2d])
+MIT License
 
-  [983cff2d]: https://github.com/websockets/ws "ws github"
-
- More easy to use and a room system is available natively.
-
-## Code Example
-Basic server
-
-```javascript
-
-const easycom = require('easy-com');
-const server = new easycom({host:'localhost', port:8080});
-
-server.on('status', (info)=> console.log(info.message));
-server.on('connection', (socket)=> { console.log('socket # %s connected', socket.uuid)});
-server.on('disconnect', (socket, code, message) => console.log('socket #%s disconnected', socket.uuid));
-
-server.start();
-
-```
-
-## Installation
-
-```
-npm install --save easy-com
-```
-
-
-## MIT License
-
-Copyright (c) 2016 Gauthier de Girodon Pralong
+Copyright (c) 2016 Gauthier de Girodon 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
