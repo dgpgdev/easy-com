@@ -1,11 +1,13 @@
 /**
- *
+ * Class to represent room
+ * @author Gauthier de Girodon Pralong
  */
+
 class Room {
-  
+
     /**
-     * [id description]
-     * @type {String}
+     * Constructor
+     * @param {string} id - The id value
      */
     constructor(id = '') {
         this.id = id;
@@ -13,14 +15,16 @@ class Room {
     }
 
     /**
-     *
+     * Add socket to room
+     * @param {Websocket} socket - the websocket object
      */
     join(socket) {
         this._clientList.push(socket);
     }
 
     /**
-     *
+     * Remove socket from room
+     * @param {Websocket} socket - the websocket object
      */
     leave(socket) {
         this._clientList = this._clientList.filter((u) => {
@@ -30,16 +34,18 @@ class Room {
 
     /**
      * invoke method to all sockets in room
+     * @param {string} evt - event label
+     * @param {Array} args - arguments array
      */
-    invoke(evt, data) {
+    invoke(evt, ...args) {
         this._clientList.forEach((socket) => {
-            socket.invoke(evt, data)
+            socket.invoke.apply(this, [evt].concat(args))
         });
     }
 
     /**
-     * [clients description]
-     * @return {[type]} [description]
+     * Get clients list
+     * @return {Array} the clients list
      */
     get clients() {
         return this._clientList;

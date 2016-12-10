@@ -3,20 +3,19 @@ import WS from 'ws'
 import uuid from 'uuid'
 import RoomManager from './rooms/RoomManager'
 /**
- *
+ * Class represent ws decorator
+ * @author Gauthier de Girodon Pralong
  */
 class Server extends Emitter.EventEmitter {
     /**
-     * [opts description]
-     * @type {Object}
+     * Constructor
+     * @type {Object} opts - the option object
      */
     constructor(opts = {}) {
         super()
         this.opts = opts;
         Emitter.EventEmitter.call(this)
-        this.plugins = [];
         this.roomManager = new RoomManager();
-        console.log('test');
     }
 
     /**
@@ -26,48 +25,65 @@ class Server extends Emitter.EventEmitter {
         this.ws.on('connection', (socket) => {
             //generate a uniq user id
             socket.uuid = uuid.v1();
+
             //add socket to room
             socket.join = (roomID) => {
-                    this.roomManager.join(roomID, socket)
-                }
-                //remove socket from room
+                this.roomManager.join(roomID, socket)
+            }
+
+            //remove socket from room
             socket.leave = (roomID) => {
-                    this.roomManager.leave(roomID, socket)
-                }
-                //get room object
+                this.roomManager.leave(roomID, socket)
+            }
+
+            //leave clients from all rooms
+            socket.leaveAll = () =>{
+              socket.rooms.forEach((roomID)=>{
+                socket.leave(roomID)
+              })
+            }
+
+            //get room object
             socket.room = (roomID) => {
-                    return this.roomManager.getRoom(roomID);
-                }
-                //invoke method on client socket
+                return this.roomManager.getRoom(roomID);
+            }
+
+            //invoke method on client socket
             socket.invoke = (evt, ...args) => {
-                    socket.send(JSON.stringify({
-                        evt,
-                        data: args
-                    }))
-                }
-                //get socket by uuid
+                socket.send(JSON.stringify({
+                    evt,
+                    data: args
+                }))
+            }
+
+            //get socket by uuid
             socket.to = (socketID) => {
-                    return this.ws.clients.filter((client) => client.uuid === socketID)[0];
-                }
-                //invoke method to all connected socket
+                return this.ws.clients.filter((client) => client.uuid === socketID)[0];
+            }
+
+            //invoke method to all connected socket
             socket.broadcast = (evt, ...args) => {
-                    this.ws.clients.forEach((socket) => socket.invoke.apply(this, [evt].concat(args)));
-                }
-                //dispatch event
+                this.ws.clients.forEach((socket) => socket.invoke.apply(this, [evt].concat(args)));
+            }
+
+            //dispatch event
             socket.on('message', (data) => {
-                    let d = JSON.parse(data);
-                    this.emit.apply(this, [d.evt, socket].concat(d.data))
-                })
-                //dispatch disconnect event
+                let d = JSON.parse(data);
+                this.emit.apply(this, [d.evt, socket].concat(d.data))
+            })
+
+            //dispatch disconnect event
             socket.on('close', (code, message) => {
                 this.emit('disconnect', socket, code, message);
             })
 
             //create listeners
             this.createListeners(socket, ['error', 'ping', 'pong', 'open'])
-                //dispatch connection event
+
+            //dispatch connection event
             this.emit('connection', socket)
         })
+        
         this.createListeners(this.ws, ['error', 'headers'])
     }
 
@@ -92,7 +108,6 @@ class Server extends Emitter.EventEmitter {
         this.emit('status', {
             statudID: 0,
             message: 'Server is ready'
-
         })
     }
 
@@ -118,7 +133,7 @@ class Server extends Emitter.EventEmitter {
 
     /**
      * [rooms description]
-     * @return {[type]} [description]
+     * @return {Array} [description]
      */
     get rooms() {
         return this.roomManager.rooms;
