@@ -15,7 +15,7 @@ class Server extends Emitter.EventEmitter {
         super()
         this.opts = opts;
         Emitter.EventEmitter.call(this)
-        this.roomManager = new RoomManager();
+        this._roomManager = new RoomManager();
     }
 
     /**
@@ -28,12 +28,12 @@ class Server extends Emitter.EventEmitter {
 
             //add socket to room
             socket.join = (roomID) => {
-                this.roomManager.join(roomID, socket)
+                this._roomManager.join(roomID, socket)
             }
 
             //remove socket from room
             socket.leave = (roomID) => {
-                this.roomManager.leave(roomID, socket)
+                this._roomManager.leave(roomID, socket)
             }
 
             //leave clients from all rooms
@@ -45,15 +45,12 @@ class Server extends Emitter.EventEmitter {
 
             //get room object
             socket.room = (roomID) => {
-                return this.roomManager.getRoom(roomID);
+                return this._roomManager.getRoom(roomID);
             }
 
             //invoke method on client socket
-            socket.invoke = (evt, ...args) => {
-                socket.send(JSON.stringify({
-                    evt,
-                    data: args
-                }))
+            socket.invoke = (...args) => {
+                socket.send(JSON.stringify(args))
             }
 
             //get socket by uuid
@@ -69,7 +66,8 @@ class Server extends Emitter.EventEmitter {
             //dispatch event
             socket.on('message', (data) => {
                 let d = JSON.parse(data);
-                this.emit.apply(this, [d.evt, socket].concat(d.data))
+                d.splice(1,0,socket);
+                this.emit.apply(this, d);
             })
 
             //dispatch disconnect event
@@ -83,7 +81,7 @@ class Server extends Emitter.EventEmitter {
             //dispatch connection event
             this.emit('connection', socket)
         })
-        
+
         this.createListeners(this.ws, ['error', 'headers'])
     }
 
@@ -132,12 +130,22 @@ class Server extends Emitter.EventEmitter {
     }
 
     /**
-     * [rooms description]
-     * @return {Array} [description]
+     * Get all rooms
+     * @return {Array} room list
      */
     get rooms() {
-        return this.roomManager.rooms;
+        return this._roomManager.rooms;
     }
+
+    /**
+     * Get the room manager
+     * @method roomManager
+     * @return {RoomManager}    the room manager
+     */
+    get roomManager(){
+      return this._roomManager;
+    }
+
 
 }
 export default Server

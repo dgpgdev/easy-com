@@ -1,6 +1,6 @@
 {
   "name": "easy-com",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "an easy way to build realtime communication server",
   "keywords": [
     "websocket",
