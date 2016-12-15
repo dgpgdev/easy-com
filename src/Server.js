@@ -25,7 +25,7 @@ class Server extends Emitter.EventEmitter {
         this.ws.on('connection', (socket) => {
             //generate a uniq user id
             socket.uuid = uuid.v1();
-
+						socket.rooms = [];
             //add socket to room
             socket.join = (roomID) => {
                 this._roomManager.join(roomID, socket)
@@ -36,7 +36,7 @@ class Server extends Emitter.EventEmitter {
                 this._roomManager.leave(roomID, socket)
             }
 
-            //leave clients from all rooms
+            //leave client from all rooms
             socket.leaveAll = () =>{
               socket.rooms.forEach((roomID)=>{
                 socket.leave(roomID)
