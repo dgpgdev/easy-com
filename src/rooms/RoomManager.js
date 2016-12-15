@@ -47,10 +47,6 @@ class RoomManager {
      */
     join(roomID, socket) {
         let r = this.create(roomID);
-
-        if (socket.rooms === undefined) {
-            socket.rooms = [];
-        }
         socket.rooms.push(roomID);
         r.join(socket);
     }

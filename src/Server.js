@@ -25,7 +25,10 @@ class Server extends Emitter.EventEmitter {
         this.ws.on('connection', (socket) => {
             //generate a uniq user id
             socket.uuid = uuid.v1();
+
+						//define rooms property for socket
 						socket.rooms = [];
+
             //add socket to room
             socket.join = (roomID) => {
                 this._roomManager.join(roomID, socket)
