@@ -6,37 +6,17 @@ Easy-Com is a decorator of powerfull ws package ([ws github][983cff2d])
  More easy to use and a room system is available natively.
 
 
- ## Installation
+## Installation
 
  ```
  npm install --save easy-com
  ```
 
-## Code Example
-Basic server
+## Documentation and Example
+[Docummention][121d4d2f]
 
-```javascript
+  [121d4d2f]: https://github.com/dgpgdev/easy-com/wiki "Documentation"
 
-const easycom = require('easy-com');
-const server = new easycom({host:'localhost', port:8080});
-
-server.on('status', (info)=> console.log(info.message));
-
-server.on('connection', (socket)=> {
-  console.log('socket # %s connected', socket.uuid)
-});
-
-server.on('disconnect', (socket, code, message) => {
-  console.log('socket #%s disconnected', socket.uuid)
-});
-
-server.start();
-
-```
-
-## Api Reference
-
-Room
 
 ## MIT License
 

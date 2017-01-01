@@ -36,10 +36,9 @@ class RoomManager {
           r = new Room(roomID, keepAlive)
           this.roomList.push(r);
       }
-
       return r;
-
     }
+
     /**
      * Add socket to room
      * @param {string} roomdID - the room id
@@ -50,7 +49,6 @@ class RoomManager {
         socket.rooms.push(roomID);
         r.join(socket);
     }
-
 
     /**
      * Remove socket from room
