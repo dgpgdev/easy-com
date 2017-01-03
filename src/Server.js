@@ -2,6 +2,7 @@ import Emitter from 'events'
 import WS from 'ws'
 import uuid from 'uuid'
 import RoomManager from './rooms/RoomManager'
+import MiddleWareManager from './middleware/MiddleWareManager'
 /**
  * Class represent ws decorator
  * @author Gauthier de Girodon Pralong
@@ -16,8 +17,14 @@ class Server extends Emitter.EventEmitter {
         this.opts = opts;
         Emitter.EventEmitter.call(this)
         this._roomManager = new RoomManager();
+				this.middlewareManager = new MiddleWareManager();
     }
 
+
+		use(middleware){
+			this.middlewareManager.use(middleware);
+			return this;
+		}
     /**
      * Initialize events
      */
@@ -70,7 +77,7 @@ class Server extends Emitter.EventEmitter {
             socket.on('message', (data) => {
                 let d = JSON.parse(data);
                 d.splice(1,0,socket);
-                this.emit.apply(this, d);
+								this.middlewareManager.executeMiddleware(d[0], d[1], d.slice(2),()=>this.emit.apply(this, d));
             })
 
             //dispatch disconnect event
