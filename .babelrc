@@ -1,1 +1,8 @@
-{ "presets": [ "es2015" ] }
+{ "presets": [ "latest" ],
+	"plugins": [
+	    ["transform-runtime", {
+	      "polyfill": false,
+	      "regenerator": true
+	    }]
+	  ]
+}
