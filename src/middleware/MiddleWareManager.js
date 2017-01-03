@@ -24,20 +24,22 @@ class MiddleWareManager {
 /**
  * iterate the middleware list
  */
-	iterateMiddleWare(iterator,  evt, socket, data) {
+	iterateMiddleWare(iterator,  evt, socket, data, finish) {
 		let it = iterator.next();
 		if (!it.done) {
-			let next = () => this.iterateMiddleWare.call(this, iterator, evt, socket, data)
+			let next = () => this.iterateMiddleWare.call(this, iterator, evt, socket, data, finish)
 			it.value.call(it.value, evt, socket, data, next)
+		}else{
+			finish()
 		}
 	}
 
 /**
  * executeMiddleware
  */
-	executeMiddleware(evt, socket, data) {
+	executeMiddleware(evt, socket, data, finish) {
 		let gen = this.middlewareGen(this.middlewareList);
-		this.iterateMiddleWare(gen, evt, socket, data);
+		this.iterateMiddleWare(gen, evt, socket, data, finish);
 	}
 
 };
