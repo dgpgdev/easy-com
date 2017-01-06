@@ -5,7 +5,9 @@
   "keywords": [
     "websocket",
     "realtime",
-    "server"
+    "server",
+		"room",
+		"middleware"
   ],
   "main": "index.js",
   "scripts": {

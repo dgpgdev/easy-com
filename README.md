@@ -3,7 +3,7 @@ Easy-Com is a decorator of powerfull ws package ([ws github][983cff2d])
 
   [983cff2d]: https://github.com/websockets/ws "ws github"
 
- More easy to use and a room system is available natively.
+ More easy to use, room system and middleware are natively.
 
 
 ## Installation
