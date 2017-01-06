@@ -113,7 +113,7 @@ class Server extends Emitter.EventEmitter {
 	start() {
 		this.ws = new WS.Server(this.opts);
 		this.initListeners();
-		this.emit('status', {
+		this.sendStatus({
 			statudID: 0,
 			message: 'Server is ready'
 		})
@@ -124,11 +124,15 @@ class Server extends Emitter.EventEmitter {
 	 * emit a status event
 	 */
 	stop() {
-		this.ws.close((err) => this.emit('status', {
+		this.ws.close((err) => this.sendStatus({
 			statudID: 1,
 			message: 'Server stopped',
 			error: err
 		}))
+	}
+
+	sendStatus(statusObj){
+		this.emit('status',statusObj);
 	}
 
 	/**
