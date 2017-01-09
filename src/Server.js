@@ -89,7 +89,7 @@ class Server extends Emitter.EventEmitter {
 			this.createListeners(socket, ['error', 'ping', 'pong', 'open'])
 
 			//dispatch connection event
-			this.emit('connection', socket)
+			this.emit('connect', socket)
 		})
 
 		this.createListeners(this.ws, ['error', 'headers'])
@@ -131,8 +131,8 @@ class Server extends Emitter.EventEmitter {
 		}))
 	}
 
-	sendStatus(statusObj){
-		this.emit('status',statusObj);
+	sendStatus(statusObj) {
+		this.emit('status', statusObj);
 	}
 
 	/**
