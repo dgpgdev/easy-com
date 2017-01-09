@@ -160,6 +160,5 @@ class Server extends Emitter.EventEmitter {
 		return this._roomManager;
 	}
 
-
 }
 export default Server
