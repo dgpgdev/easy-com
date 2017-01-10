@@ -20,7 +20,10 @@ class Server extends Emitter.EventEmitter {
 		this.middlewareManager = new MiddleWareManager();
 	}
 
-
+	/**
+	 * Add middleware to middlewareManager
+	 * @param {Object} a middleware function
+	 */
 	use(middleware) {
 		this.middlewareManager.use(middleware);
 		return this;
