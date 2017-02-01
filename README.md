@@ -13,9 +13,9 @@ Easy-Com is a decorator of powerfull ws package ([ws github][983cff2d])
  ```
 
 ## Documentation and Example
-[Documentation][121d4d2f]
+[Documentation][doc]
 
-  [121d4d2f]: https://github.com/dgpgdev/easy-com/wiki "Documentation"
+  [doc]: https://github.com/dgpgdev/easy-com/wiki "Documentation"
 
 [Video (french)][121d4d2f]
 
