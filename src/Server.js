@@ -14,7 +14,7 @@ class Server extends Emitter.EventEmitter {
 	 * @param {number} [opts.port=5678] - port to listen
 	 * @param {string} [opts.host='localhost'] - server host
 	 */
-	constructor(opts = {host:'localhost', port:5678}) {
+	constructor(opts = {host: 'localhost', port: 5678}) {
 		super()
 		this.opts = opts;
 		Emitter.EventEmitter.call(this)
@@ -119,7 +119,8 @@ class Server extends Emitter.EventEmitter {
 		this.initListeners();
 		this.sendStatus({
 			statudID: 0,
-			message: 'Server is ready'
+			message: 'Server is ready',
+			...this.opts
 		})
 	}
 
