@@ -1,6 +1,6 @@
 {
 	"name": "easy-com",
-	"version": "0.0.9",
+	"version": "0.1.1",
 	"description": "an easy way to build realtime communication server",
 	"keywords": [ "websocket", "realtime", "server", "room", "middleware" ],
 	"main": "index.js",
