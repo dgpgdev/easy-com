@@ -10,9 +10,11 @@ import MiddleWareManager from './middleware/MiddleWareManager'
 class Server extends Emitter.EventEmitter {
 	/**
 	 * Constructor
-	 * @type {Object} opts - the option object
+	 * @param {object} opts the option object
+	 * @param {number} [opts.port=5678] - port to listen
+	 * @param {string} [opts.host='localhost'] - server host
 	 */
-	constructor(opts = {}) {
+	constructor(opts = {host:'localhost', port:5678}) {
 		super()
 		this.opts = opts;
 		Emitter.EventEmitter.call(this)
@@ -78,8 +80,7 @@ class Server extends Emitter.EventEmitter {
 
 			//dispatch event
 			socket.on('message', (data) => {
-				let d = JSON.parse(data);
-				d.splice(1, 0, socket);
+				let d = JSON.parse(data).splice(1, 0, socket);
 				this.middlewareManager.executeMiddleware(d[0], d[1], d.slice(2), () => this.emit.apply(this, d));
 			})
 
@@ -140,7 +141,7 @@ class Server extends Emitter.EventEmitter {
 
 	/**
 	 * Get all clients connected to server
-	 * @return {Array} array list of socket
+	 * @return {array} array list of socket
 	 */
 	get clients() {
 		return this.ws.clients;
@@ -148,7 +149,7 @@ class Server extends Emitter.EventEmitter {
 
 	/**
 	 * Get all rooms
-	 * @return {Array} room list
+	 * @return {array} room list
 	 */
 	get rooms() {
 		return this._roomManager.rooms;
@@ -157,11 +158,12 @@ class Server extends Emitter.EventEmitter {
 	/**
 	 * Get the room manager
 	 * @method roomManager
-	 * @return {RoomManager}    the room manager
+	 * @return {RoomManager} the room manager
 	 */
 	get roomManager() {
 		return this._roomManager;
 	}
 
 }
+
 export default Server
