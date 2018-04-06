@@ -9,14 +9,15 @@ import MiddleWareManager from './middleware/MiddleWareManager'
  */
 class Server extends Emitter.EventEmitter {
 	/**
-	 * Constructor
-	 * @param {object} opts the option object
-	 * @param {number} [opts.port=5678] - port to listen
-	 * @param {string} [opts.host='localhost'] - server host
+	 * Initialise WebSocket Server
+	 * @param {Object} config - the option object
+	 * @param {string} [config.host='localhost'] - server host
+	 * @param {number} [config.port=5678] - port to listen
+	 * @constructor
 	 */
-	constructor(opts = {host: 'localhost', port: 5678}) {
+	constructor(config = {host: 'localhost', port: 5678}) {
 		super()
-		this.opts = opts;
+		this._config = config;
 		Emitter.EventEmitter.call(this)
 		this._roomManager = new RoomManager();
 		this.middlewareManager = new MiddleWareManager();
@@ -24,7 +25,7 @@ class Server extends Emitter.EventEmitter {
 
 	/**
 	 * Add middleware to middlewareManager
-	 * @param {Object} a middleware function
+	 * @param {Object} middleware middleware function
 	 */
 	use(middleware) {
 		this.middlewareManager.use(middleware);
@@ -115,12 +116,12 @@ class Server extends Emitter.EventEmitter {
 	 * emit a status event
 	 */
 	start() {
-		this.ws = new WS.Server(this.opts);
+		this.ws = new WS.Server(this.config);
 		this.initListeners();
 		this.sendStatus({
 			statudID: 0,
 			message: 'Server is ready',
-			...this.opts
+			...this.config
 		})
 	}
 
@@ -163,6 +164,20 @@ class Server extends Emitter.EventEmitter {
 	 */
 	get roomManager() {
 		return this._roomManager;
+	}
+
+	/**
+	 * Define host and port for connection
+	 * @returns {Object} Configuration Object
+	 */
+	get config(){
+		return this._config
+	}
+
+	set config(config){
+		if(config){
+			this._config = config
+		}
 	}
 
 }
