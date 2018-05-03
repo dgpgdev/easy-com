@@ -81,8 +81,9 @@ class Server extends Emitter.EventEmitter {
 
 			//dispatch event
 			socket.on('message', (data) => {
-				let d = JSON.parse(data).splice(1, 0, socket);
-				this.middlewareManager.executeMiddleware(d[0], d[1], d.slice(2), () => this.emit.apply(this, d));
+				let d = JSON.parse(data)
+				d.splice(1, 0, socket)
+				this.middlewareManager.executeMiddleware(d[0], d[1], d.slice(2), () => this.emit.apply(this, d))
 			})
 
 			//dispatch disconnect event
